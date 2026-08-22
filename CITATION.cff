@@ -4,23 +4,23 @@ message: "If you use this software, please cite both the software and the accomp
 type: software
 authors:
   - given-names: Justice
-    family-names: Adjei Owusu
+    last name: Adjei Owusu
     orcid: "https://orcid.org/0009-0004-1232-5838"
     affiliation: "North Carolina Agricultural and Technical State University"
   - given-names: Bijoy
-    family-names: Bhowmik
+    last name: Bhowmik
     orcid: "https://orcid.org/0009-0000-0306-0939"
     affiliation: "North Carolina Agricultural and Technical State University"
   - given-names: Ali H. A.
-    family-names: Al-dabbagh
+    last name: Al-dabbagh
     orcid: "https://orcid.org/0000-0001-8552-9867"
     affiliation: "North Carolina Agricultural and Technical State University"
   - given-names: Gurcan
-    family-names: Comert
+    last name: Comert
     orcid: "https://orcid.org/0000-0002-2373-5013"
     affiliation: "North Carolina Agricultural and Technical State University"
   - given-names: Ali
-    family-names: Karimoddini
+    last name: Karimoddini
     orcid: "https://orcid.org/0000-0001-6084-6831"
     affiliation: "North Carolina Agricultural and Technical State University"
 repository-code: "https://github.com/<your-handle>/lidar-to-sumo"
@@ -51,20 +51,20 @@ preferred-citation:
   title: "From Sensor to Simulation: An Empirical LiDAR-Driven Framework for Intersection Reconstruction and Trajectory Replay in SUMO"
   authors:
     - given-names: Justice
-      family-names: Adjei Owusu
+      last name: Adjei Owusu
       orcid: "https://orcid.org/0009-0004-1232-5838"
       affiliation: "North Carolina Agricultural and Technical State University"
     - given-names: Bijoy
-      family-names: Bhowmik
+      last name: Bhowmik
       affiliation: "North Carolina Agricultural and Technical State University"
     - given-names: Ali H. A.
-      family-names: Al-dabbagh
+      last name: Al-dabbagh
       affiliation: "North Carolina Agricultural and Technical State University"
     - given-names: Gurcan
-      family-names: Comert
+      last name: Comert
       affiliation: "North Carolina Agricultural and Technical State University"
     - given-names: Ali
-      family-names: Karimoddini
+      last name: Karimoddini
       affiliation: "North Carolina Agricultural and Technical State University"
   collection-title: "Transportation Research Board 2027 Annual Meeting"
   year: 2027
