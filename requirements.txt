@@ -1,1 +1,18 @@
-jj
+# Runtime dependencies for LiDAR-to-SUMO.
+# For development use `pip install -e ".[dev,notebooks]"` instead.
+
+numpy>=1.24
+pandas>=2.0
+pyarrow>=14.0
+scipy>=1.11
+PyYAML>=6.0
+matplotlib>=3.7
+tqdm>=4.66
+click>=8.1
+
+# Stage 5 (SUMO replay) additionally requires a working SUMO 1.18+
+# installation with `netconvert` on PATH. The Python bindings below ship
+# with SUMO and are also available on PyPI:
+#
+#   traci>=1.18
+#   sumolib>=1.18

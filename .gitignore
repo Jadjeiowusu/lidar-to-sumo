@@ -1,1 +1,41 @@
-j
+# Pipeline outputs
+outputs/
+*.parquet
+!data/sample/*.parquet
+
+# Sensor recordings — never commit raw field data
+*.db3
+*.mcap
+rosbag2_*/
+data/raw/
+
+# SUMO artefacts
+*.net.xml
+*.rou.xml
+*.sumocfg
+!config/*.sumocfg
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.env
+
+# Tooling
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

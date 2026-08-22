@@ -1,1 +1,108 @@
-h
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lidar-to-sumo"
+version = "0.1.0"
+description = "Derive SUMO network geometry, vehicle trajectories, and signal phase data from fixed-infrastructure LiDAR and roadside unit deployments."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Justice Adjei Owusu", email = "jadjeiowusu1@aggies.ncat.edu" },
+]
+maintainers = [
+    { name = "Justice Adjei Owusu", email = "jadjeiowusu1@aggies.ncat.edu" },
+]
+keywords = [
+    "intersection-safety",
+    "roadside-lidar",
+    "trajectory-extraction",
+    "traffic-simulation",
+    "sumo",
+    "spat",
+    "surrogate-safety",
+    "transportation",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+]
+
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "pyarrow>=14.0",
+    "scipy>=1.11",
+    "PyYAML>=6.0",
+    "matplotlib>=3.7",
+    "tqdm>=4.66",
+    "click>=8.1",
+]
+
+[project.optional-dependencies]
+sumo = [
+    # SUMO itself is not pip-installable in a portable way; see README.
+    # `traci` and `sumolib` ship with SUMO and are also on PyPI.
+    "traci>=1.18",
+    "sumolib>=1.18",
+]
+notebooks = [
+    "jupyterlab>=4.0",
+    "seaborn>=0.13",
+]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "ruff>=0.5",
+    "black>=24.0",
+    "mypy>=1.8",
+]
+
+[project.urls]
+Homepage = "https://github.com/<jadjeiowusu>/lidar-to-sumo"
+Documentation = "https://github.com/<jadjeiowusu>/lidar-to-sumo/tree/main/docs"
+Repository = "https://github.com/<jadjeiowusu>/lidar-to-sumo"
+Issues = "https://github.com/<jadjeiowusu>/lidar-to-sumo/issues"
+
+[project.scripts]
+lidar-to-sumo = "lidar_to_sumo.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+lidar_to_sumo = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+    "slow: tests that take more than a few seconds",
+    "sumo: tests requiring a working SUMO installation",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
