@@ -1,0 +1,150 @@
+# =============================================================================
+# Intersection site configuration
+# =============================================================================
+# Every site-specific parameter used by the pipeline lives in this file.
+# Nothing about a particular intersection is hard-coded elsewhere in the
+# toolkit. To run LiDAR-to-SUMO at your own intersection, copy this file,
+# change the values below, and point the pipeline at it.
+#
+# The values shipped here describe the reference installation used in the
+# accompanying paper. See docs/configuration.md for guidance on deriving
+# each value from your own recordings.
+# =============================================================================
+
+site:
+  name: "E Market St & S Dudley St"
+  city: "Greensboro"
+  state: "NC"
+  country: "US"
+  signal_plan: "GBO-098"          # controller plan identifier, for reference
+  description: >-
+    Four-approach signalized intersection operating under a dual-ring plan
+    with dedicated north-south and east-west phases. Concrete median
+    separates opposing directions on the east and west approaches.
+
+# -----------------------------------------------------------------------------
+# Approaches
+# -----------------------------------------------------------------------------
+# `label` is used throughout the pipeline and in all outputs.
+# `bearing_deg` is the real-world compass bearing of the ingress movement.
+# -----------------------------------------------------------------------------
+approaches:
+  - label: N3
+    street: "N Dudley Street"
+    direction: northbound_ingress
+    ingress_lanes: 3
+    egress_lanes: 2
+    stopbar_distance_m: 28.0       # derived empirically; see docs
+  - label: S3
+    street: "S Dudley Street"
+    direction: southbound_ingress
+    ingress_lanes: 3
+    egress_lanes: 2
+    stopbar_distance_m: 30.0
+  - label: E3
+    street: "East Market Street"
+    direction: eastbound_ingress
+    ingress_lanes: 3
+    egress_lanes: 2
+    stopbar_distance_m: 26.0
+  - label: W4
+    street: "East Market Street"
+    direction: westbound_ingress
+    ingress_lanes: 4
+    egress_lanes: 2
+    stopbar_distance_m: 32.0
+
+# -----------------------------------------------------------------------------
+# Sensor frame
+# -----------------------------------------------------------------------------
+sensor_frame:
+  # Rotation of the LiDAR sensor frame relative to real-world cardinal
+  # directions. Positive is clockwise. Affects approach classification only.
+  rotation_deg: 90.0
+  sample_rate_hz: 10.0
+  topics:
+    detections: "/ouster/raw_objects"
+    spat: "/obu/spat/phases"
+    camera: "/camera/image_raw"
+
+# -----------------------------------------------------------------------------
+# Detection filtering
+# -----------------------------------------------------------------------------
+detection_filters:
+  classes: ["VEHICLE", "LARGE_VEHICLE"]
+  min_lidar_points: 1              # drop npts == 0 as ghost extrapolations
+  # Detections used for geometry fitting only
+  geometry_fit:
+    min_speed_mps: 1.0
+    min_range_m: 15.0
+    max_range_m: 80.0
+  # Inside this radius, position alone cannot separate approaches;
+  # velocity heading is used instead
+  near_junction_radius_m: 8.0
+
+# -----------------------------------------------------------------------------
+# Network generation
+# -----------------------------------------------------------------------------
+network:
+  axis_fit_method: svd
+  junction_estimation: least_squares_intersection
+  max_axis_std_deg: 2.0            # cross-recording stability gate
+  # Constant offset introduced by netconvert during network compilation.
+  # Determined empirically once per network; see docs/configuration.md.
+  netconvert_offset_m: [78.26, 82.81]
+
+# -----------------------------------------------------------------------------
+# Trajectory construction
+# -----------------------------------------------------------------------------
+trajectory:
+  max_frame_gap_s: 2.0
+  max_position_jump_m: 5.0
+  # Below this speed, heading is unreliable and the ingress filter is
+  # bypassed; junction passage alone confirms ingress
+  heading_unreliable_below_mps: 0.5
+
+# -----------------------------------------------------------------------------
+# Signal phase mapping
+# -----------------------------------------------------------------------------
+# Maps controller signal groups to approaches. Derived from empirical phase
+# sequencing observed in the SPaT stream, not assumed from the plan sheet.
+# -----------------------------------------------------------------------------
+spat:
+  group_map:
+    "1": E3
+    "2": E3
+    "3": S3
+    "4": S3
+    "5": W4
+    "6": W4
+    "7": N3
+    "8": N3
+  moving_vehicle_threshold_mps: 3.0
+
+# -----------------------------------------------------------------------------
+# SUMO replay
+# -----------------------------------------------------------------------------
+replay:
+  step_length_s: 0.1
+  disable_signal_compliance: true  # setSpeedMode(0)
+  disable_lane_changing: true      # setLaneChangeMode(0)
+  max_frame_residual_s: 2.0
+  removal_grace_s: 1.0
+
+# -----------------------------------------------------------------------------
+# Performance metrics
+# -----------------------------------------------------------------------------
+metrics:
+  free_flow_speed_mps: 13.4        # from posted speed limit
+  stopped_speed_threshold_mps: 0.3 # LiDAR-derived queue and stopped delay
+  sumo_halting_threshold_mps: 0.1  # SUMO getLastStepHaltingNumber default
+  queue_radius_m: 80.0
+
+# -----------------------------------------------------------------------------
+# Validation
+# -----------------------------------------------------------------------------
+validation:
+  enable_count_parity_check: true
+  ground_truth_source: camera_manual_count
+  # Recordings with manual camera counts available for three-way comparison
+  ground_truth_recordings: ["000", "009", "027"]
