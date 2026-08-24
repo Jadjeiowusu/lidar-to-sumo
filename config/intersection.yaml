@@ -27,41 +27,57 @@ site:
 # -----------------------------------------------------------------------------
 # `label` is used throughout the pipeline and in all outputs.
 # `bearing_deg` is the real-world compass bearing of the ingress movement.
-# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------  
 approaches:
   - label: N3
     street: "N Dudley Street"
     direction: northbound_ingress
     ingress_lanes: 3
     egress_lanes: 2
-    stopbar_distance_m: 28.0       # derived empirically; see docs
+    egress_label: N2
+    stopbar_distance_m: 28.0
   - label: S3
     street: "S Dudley Street"
     direction: southbound_ingress
     ingress_lanes: 3
     egress_lanes: 2
+    egress_label: S2
     stopbar_distance_m: 30.0
   - label: E3
     street: "East Market Street"
     direction: eastbound_ingress
     ingress_lanes: 3
     egress_lanes: 2
+    egress_label: E2
     stopbar_distance_m: 26.0
   - label: W4
     street: "East Market Street"
     direction: westbound_ingress
     ingress_lanes: 4
     egress_lanes: 2
+    egress_label: W2
     stopbar_distance_m: 32.0
 
 # -----------------------------------------------------------------------------
 # Sensor frame
 # -----------------------------------------------------------------------------
+# sensor_frame:
+#   # Rotation of the LiDAR sensor frame relative to real-world cardinal
+#   # directions. Positive is clockwise. Affects approach classification only.
+#   rotation_deg: 90.0
+#   sample_rate_hz: 10.0
+#   topics:
+#     detections: "/ouster/raw_objects"
+#     spat: "/obu/spat/phases"
+#     camera: "/camera/image_raw"
 sensor_frame:
-  # Rotation of the LiDAR sensor frame relative to real-world cardinal
-  # directions. Positive is clockwise. Affects approach classification only.
   rotation_deg: 90.0
   sample_rate_hz: 10.0
+  quadrant_labels:
+    x_pos: N3
+    x_neg: S3
+    y_pos: W4
+    y_neg: E3
   topics:
     detections: "/ouster/raw_objects"
     spat: "/obu/spat/phases"
@@ -89,6 +105,8 @@ network:
   axis_fit_method: svd
   junction_estimation: least_squares_intersection
   max_axis_std_deg: 2.0            # cross-recording stability gate
+  min_fit_detections: 2000
+  axis_length_m: 90.0
   # Constant offset introduced by netconvert during network compilation.
   # Determined empirically once per network; see docs/configuration.md.
   netconvert_offset_m: [78.26, 82.81]
@@ -108,19 +126,18 @@ trajectory:
 # -----------------------------------------------------------------------------
 # Maps controller signal groups to approaches. Derived from empirical phase
 # sequencing observed in the SPaT stream, not assumed from the plan sheet.
-# -----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 spat:
   group_map:
-    "1": E3
-    "2": E3
-    "3": S3
-    "4": S3
-    "5": W4
-    "6": W4
-    "7": N3
-    "8": N3
+    "1": S3
+    "2": S3
+    "3": E3
+    "4": E3
+    "5": N3
+    "6": N3
+    "7": W4
+    "8": W4
   moving_vehicle_threshold_mps: 3.0
-
 # -----------------------------------------------------------------------------
 # SUMO replay
 # -----------------------------------------------------------------------------

@@ -1,1 +1,11 @@
-hh
+site_config: config/intersection.yaml
+
+paths:
+  extraction_dir: outputs/extraction
+  network_dir: outputs/network
+  replay_dir: outputs/replay
+  validation_dir: outputs/validation
+
+extraction:
+  reader: rosbag_reader
+  source: C:/Users/jadjeiowusu1/ros2_ws/rosbag2_2026_06_25_split
