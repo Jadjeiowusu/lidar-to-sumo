@@ -71,7 +71,8 @@ def main() -> None:
     approach_labels = [a["label"] for a in site["approaches"]]
     min_fit = site["network"]["min_fit_detections"]
 
-    files = sorted(outdir.glob("*_detections.parquet"))
+    #files = sorted(outdir.glob("*_detections.parquet"))
+    files = sorted(outdir.glob("detections_*.parquet"))
     if not files:
         raise SystemExit(f"No *_detections.parquet in {outdir} — run extraction first.")
 
@@ -80,7 +81,8 @@ def main() -> None:
         det = pd.read_parquet(path)
         pooled.append(det)
         row, _, _ = fit_recording(det, site)
-        row["recording"] = path.stem.replace("_detections", "")
+        #row["recording"] = path.stem.replace("_detections", "")
+        row["recording"] = path.stem.replace("detections_", "")
         rows.append(row)
 
     per_recording = pd.DataFrame(rows).set_index("recording")

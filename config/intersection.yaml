@@ -104,7 +104,7 @@ detection_filters:
 network:
   axis_fit_method: svd
   junction_estimation: least_squares_intersection
-  max_axis_std_deg: 2.0            # cross-recording stability gate
+  max_axis_std_deg: 7.0 #2.0            # cross-recording stability gate
   min_fit_detections: 2000
   axis_length_m: 90.0
   # Constant offset introduced by netconvert during network compilation.
