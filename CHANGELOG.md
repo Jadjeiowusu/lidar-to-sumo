@@ -8,86 +8,69 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
-Nothing yet.
+### Planned
+
+- SPaT indexing: time-indexed phase structure and empirical signal-group inference
+- Trajectory extraction: approach classification, track assembly, junction passage and ingress filtering
+- SUMO replay via TraCI with observed kinematics preserved
+- Performance metrics: control delay, stopped delay, queue length, throughput per cycle
+- Validation suite: count parity, ground-truth comparison, report generation
+- Adapters for roadside radar and camera-based tracking platforms
 
 ---
 
-## [0.1.0] — 2026-08-25
+## [0.1.0] — 2026-08-24
 
-Initial public release, accompanying the manuscript *From Sensor to Simulation: An Empirical LiDAR-Driven Framework for Intersection Reconstruction and Trajectory Replay in SUMO*, submitted to the Transportation Research Board 2027 Annual Meeting.
+Initial public release. Ships the extraction and network generation stages of the framework described in *From Sensor to Simulation: An Empirical LiDAR-Driven Framework for Intersection Reconstruction and Trajectory Replay in SUMO*, submitted to the Transportation Research Board 2027 Annual Meeting (paper TRBAM-27-03392).
 
 ### Added
 
 **Extraction**
-- Reader for rosbag2 SQLite3 archives emitting the canonical detection and SPaT schemas
+- Reader for rosbag2 SQLite3 archives, emitting the canonical detection schema
 - Class filtering and ghost-detection removal on LiDAR point support
-- Parquet output with dtype preservation across pipeline stages
-- Schema validation with track-stability diagnostics
+- Parquet output preserving dtypes across pipeline stages
 
 **Network generation**
-- Empirical road axis derivation from vehicle detection scatter via singular value decomposition
-- Junction centre estimation as the least-squares intersection of fitted road axes
-- Cross-recording geometric stability gate on axis angle standard deviation
-- Lane geometry assembly and `netconvert` compilation
-- Empirical determination of the sensor-to-simulation coordinate offset
+- Approach classification by position quadrant, with the sensor-frame mapping supplied by configuration rather than assumed
+- Empirical road axis derivation from vehicle detection scatter via singular value decomposition, with sign canonicalization so angles are comparable across recordings
+- Junction center estimation as the least-squares intersection of the fitted axes
+- Cross-recording geometric stability statistics, with sparse fits excluded from the summary and reported separately rather than silently averaged in
+- SUMO node and edge emission from the fitted geometry, with `netconvert` compilation
+- Derivation of the constant coordinate offset `netconvert` introduces when normalizing the network origin, cross-checked against the compiled junction position
 
-**SPaT**
-- Time-indexed signal phase structure supporting lookup at arbitrary instants
-- Empirical inference of controller signal group to approach mapping from observed phase sequencing
-
-**Trajectory extraction**
-- Position quadrant approach classifier with velocity-heading fallback near the junction
-- Track assembly by identifier with temporal ordering
-- Junction passage filtering against approach-specific empirical stop-bar thresholds
-- Ingress filtering by velocity direction, bypassed for near-stationary vehicles
-- Signal state attachment at zone entry
-
-**Replay**
-- Coordinate and heading transformation to the SUMO frame
-- Vehicle spawning with signal compliance and lane changing disabled, preserving observed kinematics
-- Frame-synchronised position updates at sensor rate via `moveToXY`
-- Residual-based vehicle removal
-
-**Metrics**
-- Control delay, stopped delay, queue length, and throughput per signal cycle
-- Dual computation from LiDAR records and from SUMO via TraCI, for comparison
-
-**Validation**
-- Automatic count parity check between extracted trajectories and replay, failing the pipeline on mismatch
-- Three-way comparison against manual camera ground truth
-- Geometric stability reporting across recordings
-- Validation report generation
+**Configuration**
+- Single site configuration file holding every intersection-dependent value; no site-specific constants elsewhere in the codebase
 
 **Documentation**
-- Stage-by-stage pipeline description
-- Input schema and adapter guide
+- Stage-by-stage pipeline description covering all five stages
+- Input schema reference and guide to writing adapters for other sensor platforms
 - Validation methodology, results, and known limitations
-- Configuration reference with derivation procedures and a failure-mode table
+- Configuration reference with a derivation procedure for each parameter and a symptom-to-cause table
+
+**Sample data**
+- Synthetic detection and SPaT datasets in the canonical schema, with a deterministic generator, so the toolkit is runnable without access to a sensor deployment
 
 **Packaging**
-- Installable package with console entry point
-- Three example notebooks walking the pipeline end to end
-- Synthetic sample dataset so the pipeline is runnable without a deployment
+- Installable Python package with console entry point
 
-### Validation at initial release
+### Validation at this release
 
-Six 30-minute recordings spanning peak, off-peak, and overnight conditions at a four-approach signalised intersection; approximately 550,000 LiDAR object frames and 108,000 SPaT records.
+Network geometry derived independently from six 30-minute recordings spanning peak, off-peak, and overnight conditions at a four-approach signalized intersection.
 
-- Ground-truth accuracy 93.7% overall against manual camera counts
-- Exact count parity between extraction and replay across all six recordings
-- Axis angle standard deviation below 2° across recordings
-- Mean replay frame residual 47 ms
+- Pooled junction center reproduced at (3.51, 2.91) m in the sensor frame, from over 548,000 vehicle detections
+- Axis angle standard deviation below 2° on the three-lane approaches: N3 1.85°, S3 0.60°, E3 1.21°
+- Four-lane W4 approach shows greater spread at 6.24°, driven by the two low-volume overnight recordings; raising the density threshold to 3,000 fitting detections reduces this to 3.45°
 
-Full results and limitations: [`docs/validation.md`](docs/validation.md).
+Full results: [`docs/validation.md`](docs/validation.md).
 
 ### Known limitations
 
-- Replayed vehicles do not interact; the replay is a record, not a behavioural simulation
-- Validation uses LiDAR alone; radar fusion is available at the reference site but unused
-- Ground truth available for two of four approaches and three of six recordings
-- Free-flow speed is derived from the posted limit rather than measured
+- Only stages 1 and 2 are released; the remaining stages are being ported from the research implementation
+- Axis fits on wide approaches require more detections to converge than on narrow ones, and low-volume recordings should be treated with corresponding caution
+- The `netconvert` coordinate offset must be re-derived whenever the network is regenerated, and verified visually — a wrong offset produces a replay that runs cleanly and means nothing
+- Validation to date comes from a single intersection
 
 ---
 
-[Unreleased]: https://github.com/<Jadjeiowusu>/lidar-to-sumo/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/<Jadjeiowusu>/lidar-to-sumo/releases/tag/v0.1.0
+[Unreleased]: https://github.com/Jadjeiowusu/lidar-to-sumo/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/Jadjeiowusu/lidar-to-sumo/releases/tag/v0.1.0

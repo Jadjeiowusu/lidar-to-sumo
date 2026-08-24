@@ -4,29 +4,29 @@ message: "If you use this software, please cite both the software and the accomp
 type: software
 authors:
   - given-names: Justice
-    last name: Adjei Owusu
+    family-names: Adjei Owusu
     orcid: "https://orcid.org/0009-0004-1232-5838"
     affiliation: "North Carolina Agricultural and Technical State University"
   - given-names: Bijoy
-    last name: Bhowmik
+    family-names: Bhowmik
     orcid: "https://orcid.org/0009-0000-0306-0939"
     affiliation: "North Carolina Agricultural and Technical State University"
   - given-names: Ali H. A.
-    last name: Al-dabbagh
+    family-names: Al-dabbagh
     orcid: "https://orcid.org/0000-0001-8552-9867"
     affiliation: "North Carolina Agricultural and Technical State University"
   - given-names: Gurcan
-    last name: Comert
+    family-names: Comert
     orcid: "https://orcid.org/0000-0002-2373-5013"
     affiliation: "North Carolina Agricultural and Technical State University"
   - given-names: Ali
-    last name: Karimoddini
+    family-names: Karimoddini
     orcid: "https://orcid.org/0000-0001-6084-6831"
     affiliation: "North Carolina Agricultural and Technical State University"
-repository-code: "https://github.com/<your-handle>/lidar-to-sumo"
+repository-code: "https://github.com/Jadjeiowusu/lidar-to-sumo"
 license: Apache-2.0
 version: 0.1.0
-date-released: "2026-08-22"
+date-released: "2026-08-24"
 keywords:
   - intersection safety
   - roadside LiDAR
@@ -37,35 +37,40 @@ keywords:
   - surrogate safety measures
   - transportation data science
 abstract: >-
-  An end-to-end open-source framework that derives SUMO network geometry,
-  vehicle demand, and signal phase data entirely from fixed-infrastructure
-  LiDAR and roadside unit deployments, requiring no manual network editing
-  and no OpenStreetMap import. The framework extracts per-vehicle
-  trajectories, validates them against camera ground truth, replays them in
-  SUMO at full sensor resolution, and computes per-vehicle delay, stopped
-  delay, queue length, and throughput per signal cycle. Validated across six
-  30-minute recordings spanning peak, off-peak, and overnight conditions at a
-  four-approach signalized intersection.
+  An open-source framework that derives SUMO network geometry, vehicle demand,
+  and signal phase data entirely from fixed-infrastructure LiDAR and roadside
+  unit deployments, requiring no manual network editing and no OpenStreetMap
+  import. Release 0.1.0 provides the extraction and network generation stages:
+  detections are read from rosbag2 archives, road axes are fitted to the
+  observed vehicle scatter by singular value decomposition, and the junction
+  centre is estimated as the least-squares intersection of those axes. Geometry
+  was derived independently from six 30-minute recordings spanning peak,
+  off-peak, and overnight conditions at a four-approach signalized
+  intersection, reproducing a pooled junction centre of (3.51, 2.91) m from
+  over 548,000 vehicle detections. Trajectory extraction, SUMO replay, and the
+  performance metrics suite are being ported from the research implementation
+  and will follow in subsequent releases.
 preferred-citation:
   type: conference-paper
   title: "From Sensor to Simulation: An Empirical LiDAR-Driven Framework for Intersection Reconstruction and Trajectory Replay in SUMO"
   authors:
     - given-names: Justice
-      last name: Adjei Owusu
+      family-names: Adjei Owusu
       orcid: "https://orcid.org/0009-0004-1232-5838"
       affiliation: "North Carolina Agricultural and Technical State University"
     - given-names: Bijoy
-      last name: Bhowmik
+      family-names: Bhowmik
       affiliation: "North Carolina Agricultural and Technical State University"
     - given-names: Ali H. A.
-      last name: Al-dabbagh
+      family-names: Al-dabbagh
       affiliation: "North Carolina Agricultural and Technical State University"
     - given-names: Gurcan
-      last name: Comert
+      family-names: Comert
       affiliation: "North Carolina Agricultural and Technical State University"
     - given-names: Ali
-      last name: Karimoddini
+      family-names: Karimoddini
       affiliation: "North Carolina Agricultural and Technical State University"
   collection-title: "Transportation Research Board 2027 Annual Meeting"
+  number: "TRBAM-27-03392"
   year: 2027
   status: submitted
