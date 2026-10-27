@@ -110,11 +110,7 @@ Validation results from other intersections are the most useful contribution thi
 
 ## Citing
 
-If you use this toolkit in published work, please cite the accompanying paper:
-
-> //
-
-Machine-readable citation metadata is in [`CITATION.cff`](CITATION.cff). Each release is archived with a DOI.
+//Soon
 
 ## Acknowledgments
 
