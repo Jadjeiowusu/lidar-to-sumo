@@ -32,9 +32,9 @@ This repository is those procedures.
 |---|---|---|---|
 | 1. Extraction | rosbag2 SQLite archives | Filtered vehicle detections, SPaT records | **Released** |
 | 2. Network generation | Detection point cloud | SUMO network from SVD axis fitting and least-squares junction estimation | **Released** |
-| 3. SPaT indexing | Roadside unit messages | Time-indexed signal state per approach | In progress |
-| 4. Trajectory extraction | Detections + geometry | Validated per-vehicle through-movement tracks | In progress |
-| 5. Replay and measurement | Trajectories + network | SUMO replay at 10 Hz with delay, queue, throughput | In progress |
+| 3. Trajectory extraction | Detections + geometry | Validated per-vehicle through-movement tracks | **Released** |
+| 4. Replay and measurement | Trajectories + network | SUMO replay at 10 Hz with delay, queue, throughput | **Released** |
+ 5. SPaT indexing | Roadside unit messages | Time-indexed signal state per approach | In progress |
 
 Each stage runs independently and writes to disk, so you can inspect or replace any of them.
 
@@ -112,7 +112,7 @@ Validation results from other intersections are the most useful contribution thi
 
 If you use this toolkit in published work, please cite the accompanying paper:
 
-> Adjei Owusu, J., Bhowmik, B., Al-dabbagh, A. H. A., Comert, G., and Karimoddini, A. *From Sensor to Simulation: An Empirical LiDAR-Driven Framework for Intersection Reconstruction and Trajectory Replay in SUMO.* Submitted to the Transportation Research Board 2027 Annual Meeting (paper TRBAM-27-03392).
+> //
 
 Machine-readable citation metadata is in [`CITATION.cff`](CITATION.cff). Each release is archived with a DOI.
 
